@@ -13,7 +13,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.activity1.navigate.AppScreen
+
 @Composable
 fun ThirdScreen(navController: NavController) {
     Scaffold() {
@@ -25,7 +28,8 @@ fun TransactionHistory(navController: NavController){
 
     Column() {
         Row() {
-            Text(text = "Movimientos")
+            Text(text = "Movimientos",
+                fontSize = 30.sp)
             IconButton(onClick = { navController.popBackStack()}) {
                 Icon(
                     Icons.Default.ArrowBack,
@@ -34,7 +38,6 @@ fun TransactionHistory(navController: NavController){
             }
         }
         Row{
-            var detailsList : List<String> = listOf("Bancolombia 20.000", "Davivienda 50.000")
             ListWithDividers()
         }
     }

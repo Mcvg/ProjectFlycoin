@@ -1,7 +1,7 @@
 package com.example.activity1.screens
 
+import android.view.View
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
@@ -11,13 +11,13 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.activity1.R
+import com.example.activity1.navigate.AppScreen
 import kotlin.random.Random
 
 @Composable
@@ -45,7 +45,10 @@ fun Transaction(navController:NavController){
 //        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row() {
-            Text(text = "Transacción")
+            Text(text = "Transacción",
+                fontSize = 30.sp)
+        }
+        Row{
             IconButton(onClick = { navController.popBackStack()}) {
                 Icon(
                     Icons.Default.ArrowBack,
@@ -145,6 +148,19 @@ fun Transaction(navController:NavController){
         }
         Text(text = "Número Cuenta")
         TextField(value = "", onValueChange = {})
+
+        Row{
+            ExtendedFloatingActionButton(
+                backgroundColor = Color(0xFF6200EE),
+                text = {
+
+                    val style = MaterialTheme.typography.button.copy(
+                        fontSize = 13.sp
+                    )
+                    Text("Transferir", style = style)
+                },
+                onClick = { navController.navigate(AppScreen.ThirdScreen.route) })
+        }
     }
 
 }
