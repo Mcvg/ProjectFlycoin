@@ -1,14 +1,24 @@
 package com.example.activity1.screens
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.BlendMode
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.activity1.navigate.AppScreen
+import com.example.activity1.R
+import kotlin.random.Random
 
 @Composable
 fun SecondScreen(navController: NavController) {
@@ -19,65 +29,122 @@ fun SecondScreen(navController: NavController) {
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun Transaction(navController:NavController){
-    val types = listOf("Bancolombia", "BBVA", "Av Villas", "Davivienda")
-    val default = "Seleccionar banco"
+    val typesBank = listOf("Bancolombia", "BBVA", "Av Villas", "Davivienda")
+    val typesAccount = listOf("Ahorros", "Corriente")
+    val defaultBank = "Seleccionar banco"
+    val defaultAccount = "Seleccionar tipo"
 
-    var expanded by remember { mutableStateOf(false) }
-    var selectedType by remember { mutableStateOf(default) }
+    var expandedBank by remember { mutableStateOf(false) }
+    var expandedAccount by remember { mutableStateOf(false) }
+    var selectedTypeBank by remember { mutableStateOf(defaultBank) }
+    var selectedTypeAccount by remember { mutableStateOf(defaultAccount) }
+    var color by remember { mutableStateOf(Color.LightGray) }
 
-    Column() {
+    Column( Modifier.size(500.dp),
+//        verticalArrangement = Arrangement.Center,
+//        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         Row() {
             Text(text = "Transacción")
-            Button(onClick = { navController.popBackStack()}) {
-                Text(text = "X")
+            IconButton(onClick = { navController.popBackStack()}) {
+                Icon(
+                    Icons.Default.ArrowBack,
+                    contentDescription = "Regresar"
+                )
             }
         }
-        Text(text = "Valor")
-        TextField(value = "", onValueChange = {})
-        Text(text = "Banco")
-        TextField(value = "", onValueChange = {})
-        Text(text = "Tipo de cuenta")
-        TextField(value = "", onValueChange = {})
-        Text(text = "Número Cuenta")
-        TextField(value = "", onValueChange = {})
 
-        ExposedDropdownMenuBox(
-            expanded = expanded,
-            onExpandedChange = {
-                expanded = !expanded // (2)
-            },
-            modifier = Modifier.width(200.dp)
-        ) {
-            TextField(
-                readOnly = true, // (3)
-                value = selectedType, // (4)
-                onValueChange = { },
-                label = { Text("Tipo Banco") },
-                trailingIcon = {
-                    ExposedDropdownMenuDefaults.TrailingIcon( // (5)
-                        expanded = expanded
-                    )
+        Text(text = "Valor")
+        Row {
+            TextField(value = "", onValueChange = {})
+            IconButton(
+                onClick = {
+                    val randomColor = Color(Random.nextLong(0xFF000000, 0xFFFFFFFF))
+                    color = randomColor
+                }) {
+                Image(
+                    painter = painterResource(id = R.drawable.dolar),
+                    contentDescription = "Cambiar moneda",
+                    modifier = Modifier.size(50.dp)
+                )
+            }
+        }
+        Text(text = "Banco")
+        Row{
+            ExposedDropdownMenuBox(
+                expanded = expandedBank,
+                onExpandedChange = {
+                    expandedBank = !expandedBank
                 },
-//                colors = ExposedDropdownMenuDefaults.textFieldColors()
-            )
-            ExposedDropdownMenu(
-                expanded = expanded,
-                onDismissRequest = {
-                    expanded = false
-                }
             ) {
-                types.forEach { selectionOption ->
-                    DropdownMenuItem(
-                        onClick = {
-                            selectedType = selectionOption
-                            expanded = false
+                TextField(
+                    readOnly = true,
+                    value = selectedTypeBank,
+                    onValueChange = { },
+                    trailingIcon = {
+                        ExposedDropdownMenuDefaults.TrailingIcon( // (5)
+                            expanded = expandedBank
+                        )
+                    },
+                )
+                ExposedDropdownMenu(
+                    expanded = expandedBank,
+                    onDismissRequest = {
+                        expandedBank = false
+                    }
+                ) {
+                    typesBank.forEach { selectionOption ->
+                        DropdownMenuItem(
+                            onClick = {
+                                selectedTypeBank = selectionOption
+                                expandedBank = false
+                            }
+                        ) {
+                            Text(text = selectionOption)
                         }
-                    ) {
-                        Text(text = selectionOption)
                     }
                 }
             }
         }
+        Text(text = "Tipo cuenta")
+        Row{
+            ExposedDropdownMenuBox(
+                expanded = expandedAccount,
+                onExpandedChange = {
+                    expandedAccount = !expandedAccount
+                },
+            ) {
+                TextField(
+                    readOnly = true,
+                    value = selectedTypeAccount,
+                    onValueChange = { },
+                    trailingIcon = {
+                        ExposedDropdownMenuDefaults.TrailingIcon( // (5)
+                            expanded = expandedAccount
+                        )
+                    },
+                )
+                ExposedDropdownMenu(
+                    expanded = expandedAccount,
+                    onDismissRequest = {
+                        expandedAccount = false
+                    }
+                ) {
+                    typesAccount.forEach { selectionOption ->
+                        DropdownMenuItem(
+                            onClick = {
+                                selectedTypeAccount = selectionOption
+                                expandedAccount = false
+                            }
+                        ) {
+                            Text(text = selectionOption)
+                        }
+                    }
+                }
+            }
+        }
+        Text(text = "Número Cuenta")
+        TextField(value = "", onValueChange = {})
     }
 
 }
